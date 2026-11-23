@@ -4,6 +4,7 @@ const pool = require('./db');
 const jwt = require('jsonwebtoken');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const authMiddleware = require('./middleware/authMiddleware');
 // Middleware
 app.use(express.json());
 
@@ -169,7 +170,13 @@ app.post('/api/login', async (req, res) => {
     }
 
 });
-
+app.get('/api/profile', authMiddleware, (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'Profile fetched successfully!',
+        user: req.user
+    });
+});
 
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {
